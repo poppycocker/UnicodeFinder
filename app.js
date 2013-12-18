@@ -20,10 +20,9 @@ $(function() {
 			'keyup': 'onSearch'
 		},
 		initialize: function() {
-			this.u = UTF8Util;
+			_.bindAll(this, 'onSearch', 'setCP', 'clear');
 		},
 		onSearch: function(e) {
-
 			var key = this.$el.val();
 			if (key === this.prev) {
 				return;
@@ -40,14 +39,8 @@ $(function() {
 				hex = +('0x' + tmp);
 				ar.push(+tmp); // ? -> dec
 				ar.push(hex); // ? -> hex
-				ar.push(this.u.hex2Codepoint(tmp));
-				ar.push(this.u.hex2Codepoint(hex));
-
-				console.log(+tmp); // ? -> dec
-				console.log(hex); // ? -> hex
-				console.log(this.u.hex2Codepoint(tmp));
-				console.log(this.u.hex2Codepoint(hex));
-
+				ar.push(String.octet2Codepoint(tmp));
+				ar.push(String.octet2Codepoint(hex));
 			}
 			// evaluate as UTF-8 String
 			for (; i < key.length; i++) {
@@ -55,20 +48,20 @@ $(function() {
 			}
 
 			ar.filter(function(v) {
-				return (!isNaN(v) && v);
+				return (!isNaN(v) && v && v <= 0x1fffff);
 			}).uniq().forEach(_.bind(function(n) {
 				this.setCP(n);
 			}, this));
 
 		},
 		setCP: function(cp) {
-			var dec = this.u.codepoint2Hex(cp);
+			var dec = String.codepoint2Octet(cp);
 			this.collection.add(new ResultUnitModel({
 				codePoint: 'U+' + cp.toString(16).toUpperCase().zeroPadding(4),
 				cpDec: cp,
 				hex: '0x' + dec.toString(16).toUpperCase().zeroPadding('even'),
 				dec: dec,
-				character: String.fromCharCode(cp)
+				character: String.fromCharCodeEx(cp)
 			}));
 		},
 		clear: function() {
