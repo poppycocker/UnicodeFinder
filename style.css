@@ -1,31 +1,69 @@
 ﻿@charset "utf-8";
 
+html {
+	font-family: 'Lucida Grande','Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+}
+
 .clearfix:after {
 	content: ""; 
 	display: block; 
 	clear: both;
 }
 
+/* hide [input] clear button in IE*/
+::-ms-clear {
+	display: none;
+}
+
 h1 {
-	font-size: 3em;
+	font-size: 2em;
 }
 
 #wrapper {
 	text-align: center;
-	padding-top: 3em;
+	padding-top: 1.2em;
+}
+
+.search_box {
+	width: 35%;
+	position: relative;
+	left: 28.5%;
+	margin: 1em 0;
 }
 
 .input_query {
 	display: block;
-	margin: 1.2em auto;
-	width: 40%;
+	width: 100%;
 	height: 1.6em;
-	padding: 0.2em;
-	font-size: 1.8em;
+	padding: 0.2em 2em;
+	font-size: 1.6em;
+}
+
+.icon-clear {
+	position: absolute;
+	right: -2.4em;
+	top: 20%;
+	font-size: 2.2em;
+	color: darkred;
+}
+.icon-clear:hover {
+	cursor: pointer;
+	color: crimson;
+}
+.icon-clear:active {
+	top: 22%;
+}
+
+.icon-search {
+	position: absolute;
+	left: 0.3em;
+	top: 20%;
+	font-size: 2.2em;
+	color: #bbbbbb;
 }
 
 .result {
-	width: 80%;
+	width: 45%;
 	margin: 0 auto;
 }
 
@@ -34,13 +72,8 @@ h1 {
 }
 
 .results li {
-	font-size: 1.5em;
-	width: 6em;
-	height: 6em;
-	border: 1px solid #000000;
-	background-color: #AAAAAA;
-	color: #FFFFFF;
-	margin: 0.2em;
+	font-size: 1.2em;
+	width: 100%;
+	border-bottom: 1px dashed #cccccc;
 	padding: 0.2em;
-	float: left;
 }

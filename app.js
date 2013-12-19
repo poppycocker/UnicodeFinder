@@ -11,34 +11,39 @@ $(function() {
 			this.resultView = new ResultView({
 				collection: collection
 			});
+
+			this.searchView.onSearch();
 		},
 	});
 
 	var SearchView = Backbone.View.extend({
-		el: '.input_query',
+		el: '.search_box',
 		events: {
-			'keyup': 'onSearch'
+			'keyup .input_query': 'onSearch',
+			'click .icon-clear': 'clearField'
 		},
 		initialize: function() {
-			_.bindAll(this, 'onSearch', 'setCP', 'clear');
+			_.bindAll(this, 'onSearch', 'setCP', 'removeAll', 'clearField');
+			this.$input = $('.input_query');
+			this.$input.focus();
 		},
 		onSearch: function(e) {
-			var key = this.$el.val();
+			var key = this.$input.val();
 			if (key === this.prev) {
 				return;
 			}
 			this.prev = key;
-			this.clear();
+			this.removeAll();
 
 			var tmp = key.toLowerCase().replace('u+', '').replace('0x', ''),
-				hex, i = 0,
+				num, hex, i = 0,
 				ar = [];
 
 			// is Number or Unicode Codepoint ?
 			if (tmp.match(/^([0-9]|[a-f])+$/)) {
 				hex = +('0x' + tmp);
-				ar.push(+tmp); // ? -> dec
-				ar.push(hex); // ? -> hex
+				ar.push(+tmp);
+				ar.push(hex);
 				ar.push(String.octet2Codepoint(tmp));
 				ar.push(String.octet2Codepoint(hex));
 			}
@@ -58,14 +63,18 @@ $(function() {
 			var dec = String.codepoint2Octet(cp);
 			this.collection.add(new ResultUnitModel({
 				codePoint: 'U+' + cp.toString(16).toUpperCase().zeroPadding(4),
-				cpDec: cp,
+				cpDec: '' + cp,
 				hex: '0x' + dec.toString(16).toUpperCase().zeroPadding('even'),
-				dec: dec,
+				dec: '' + dec,
 				character: String.fromCharCodeEx(cp)
 			}));
 		},
-		clear: function() {
+		removeAll: function() {
 			this.collection.clearAll();
+		},
+		clearField: function() {
+			this.$input.val('');
+			this.removeAll();
 		}
 	});
 
@@ -100,6 +109,7 @@ $(function() {
 		defaults: function() {
 			return {
 				codePoint: '',
+				cpDec: '',
 				hex: '',
 				dec: '',
 				character: ''
