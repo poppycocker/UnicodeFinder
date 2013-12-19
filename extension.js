@@ -120,13 +120,12 @@
 	mixin(Array.prototype, {
 		uniq: function() {
 			var o = {}, i = 0,
-				l = this.length,
 				r = [];
-			for (; i < l; i++) {
+			for (; i < this.length; i++) {
+				if (o[this[i]] === undefined) {
+					r.push(this[i]);
+				}
 				o[this[i]] = this[i];
-			}
-			for (i in o) {
-				r.push(o[i]);
 			}
 			return r;
 		}

@@ -25,24 +25,24 @@ h1 {
 }
 
 .search_box {
-	width: 35%;
+	width: 40%;
 	position: relative;
-	left: 28.5%;
+	left: 30%;
 	margin: 1em 0;
 }
 
 .input_query {
 	display: block;
-	width: 100%;
+	width: 70%;
 	height: 1.6em;
-	padding: 0.2em 2em;
+	padding: 2% 15%;
 	font-size: 1.6em;
 }
 
 .icon-clear {
 	position: absolute;
-	right: -2.4em;
-	top: 20%;
+	right: 4%;
+	top: 22%;
 	font-size: 2.2em;
 	color: darkred;
 }
@@ -51,19 +51,19 @@ h1 {
 	color: crimson;
 }
 .icon-clear:active {
-	top: 22%;
+	top: 25%;
 }
 
 .icon-search {
 	position: absolute;
-	left: 0.3em;
-	top: 20%;
+	left: 4%;
+	top: 22%;
 	font-size: 2.2em;
 	color: #bbbbbb;
 }
 
 .result {
-	width: 45%;
+	width: 40em;
 	margin: 0 auto;
 }
 
@@ -76,4 +76,35 @@ h1 {
 	width: 100%;
 	border-bottom: 1px dashed #cccccc;
 	padding: 0.2em;
+}
+
+.char_face {
+	display: block;
+	float: left;
+	font-size: 3.6em;
+	padding: 0.3em 10%;
+	width: 20%;
+}
+
+.unicode_info {
+	float: left;
+	padding: 2% 5%;
+	text-align: left;
+	width: 20%;
+}
+
+.unicode_name {
+	padding: 0.8em 0;
+}
+
+.iso8859 {
+	font-size: 0.5em;
+	padding: 2% 5%;
+	float: left;
+	text-align: left;
+	width: 20%;
+}
+
+.iso8859 li {
+	border: none;
 }

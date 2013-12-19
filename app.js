@@ -24,8 +24,8 @@ $(function() {
 		},
 		initialize: function() {
 			_.bindAll(this, 'onSearch', 'setCP', 'removeAll', 'clearField');
-			this.$input = $('.input_query');
-			this.$input.focus();
+			this.$input = $('.input_query').val('U+3042').focus();
+			//this.$input.focus();
 		},
 		onSearch: function(e) {
 			var key = this.$input.val();
@@ -66,7 +66,9 @@ $(function() {
 				cpDec: '' + cp,
 				hex: '0x' + dec.toString(16).toUpperCase().zeroPadding('even'),
 				dec: '' + dec,
-				character: String.fromCharCodeEx(cp)
+				character: String.fromCharCodeEx(cp),
+				iso8859: getISO8859N(cp),
+				name: unicodeNameList[cp] || ''
 			}));
 		},
 		removeAll: function() {
@@ -101,7 +103,7 @@ $(function() {
 			this.model.bind('destroy', this.remove);
 		},
 		render: function() {
-			this.$el.html(this.template(this.model.attributes));
+			this.$el.html(this.template(this.model.attributes)).addClass('clearfix');
 			return this;
 		}
 	});

@@ -11,6 +11,9 @@
 	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="http://underscorejs.org/underscore-min.js"></script>
 	<script src="http://backbonejs.org/backbone-min.js"></script>
+	<script src="ISO8859N2UnicodeTable.js"></script>
+	<script src="Unicode2ISO8859NTable.js"></script>
+	<script src="unicodeNameList.js"></script>
 	<script src="extension.js"></script>
 	<script src="app.js"></script>
 </head>
@@ -22,15 +25,23 @@
 			<span class="typcn typcn-times icon-clear"></span>
 			<input class="input_query" type="textbox" placeholder="e.g. E38182,U+3042,あいう">
 		</div>
-		<div class= "result clearfix">
+		<div class="result clearfix">
 			<ul class="results"></ul>
 		</div>
 	</div>
 
 	<script type=text/template id="tmpl_result">
-		<%= character %><br>
-		<%= codePoint %>&nbsp;(dec:&nbsp;<%= cpDec %>)<br>
-		<%= hex %>&nbsp;(dec:&nbsp;<%= dec %>)<br>
+		<span class="char_face"><%= character %></span>
+		<div class="unicode_info">
+			<p><%= codePoint %>&nbsp;(<%= cpDec %>)</p>
+			<p><%= hex %>&nbsp;(<%= dec %>)</p>
+			<p class="unicode_name"><%= name %></p>
+		</div>
+		<ul class="iso8859">
+			<% _.each(iso8859, function(elem) { %>
+				<li>ISO-8859-<%= elem.n %>: <em>0x<%= elem.code %></em></li>
+			<% }); %>
+		</ul>
 	</script>
 
 </body>
