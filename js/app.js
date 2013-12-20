@@ -5,7 +5,7 @@ $(function() {
 		p.prototype = {
 			getCodePoints: function(str) {
 				var tmp = str.toLowerCase().replace('u+', '').replace('0x', ''),
-					num, hex, i,
+					hex, i, ERR_CODE = -1,
 					ar = [];
 
 				// is Number or Unicode Codepoint ?
@@ -22,7 +22,7 @@ $(function() {
 				}
 
 				return ar.filter(function(v) {
-					return (!isNaN(v) && v && v <= 0x1fffff);
+					return (!isNaN(v) && v !== ERR_CODE && v <= 0x1fffff);
 				}).uniq();
 			}
 		};

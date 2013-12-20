@@ -28,6 +28,7 @@
 	];
 	var LIMIT_UCS2 = 0xffff;
 	var LIMIT_UCS4 = 0x1fffff;
+	var ERR_CODE = -1;
 
 	mixin(String, {
 		octet2Codepoint: function(octet) {
@@ -36,22 +37,22 @@
 			// size check: requires less than 4bytes
 			bytes = Math.floor(Math.log(octet) / Math.log(0xFF) + 1);
 			if (bytes > 4) {
-				return 0;
+				return ERR_CODE;
 			}
 			// range check
 			if ((0x7f < octet && octet < 0xc280) ||
 				(0xdfbf < octet && octet < 0xe0a080) ||
 				(0xefbfbf < octet && octet < 0xf0908080)) {
-				return 0;
+				return ERR_CODE;
 			}
 			// format check: 1st byte
 			if (((octet >> ((bytes - 1) * 8)) & ((0xff >> (7 - bytes)) << (7 - bytes))) !== prefixTable[bytes - 2]) {
-				return 0;
+				return ERR_CODE;
 			}
 			// format check: 2nd,3rd,4th byte
 			for (n = 0; n < bytes - 1; n++) {
 				if (((octet >> (n * 8)) & 0xc0) !== 0x80) {
-					return 0;
+					return ERR_CODE;
 				}
 			}
 
@@ -74,7 +75,7 @@
 				codePoint = +('0x' + codePoint.toLowerCase().replace('u+', ''));
 			}
 			if (codePoint > LIMIT_UCS4) {
-				return 0;
+				return ERR_CODE;
 			}
 			if (codePoint <= 0x007f) {
 				return codePoint;
@@ -102,6 +103,7 @@
 			if (codePoint > LIMIT_UCS4) {
 				return '';
 			}
+			// surrogate pair
 			codePoint -= 0x10000;
 			var w1 = 0xd800 | (codePoint >> 10);
 			var w2 = 0xDC00 | (codePoint & 0x03FF);
@@ -117,9 +119,9 @@
 				return this;
 			}
 			if (length === 'even') {
-				return (this.length % 2 === 0) ? '' + this : '0' + this;
+				return ((this.length % 2 === 0) ? '' : '0') + this;
 			} else if (length === 'odd') {
-				return (this.length % 2 === 0) ? '0' + this : '' + this;
+				return ((this.length % 2 === 0) ? '0' : '') + this;
 			}
 			for (; i < length - 1; i++) {
 				zeros += '0';
