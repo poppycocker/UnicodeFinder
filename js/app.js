@@ -1,5 +1,34 @@
 $(function() {
 
+	var QueryProcessor = (function() {
+		var p = function() {};
+		p.prototype = {
+			exec: function(str) {
+				var tmp = str.toLowerCase().replace('u+', '').replace('0x', ''),
+					num, hex, i,
+					ar = [];
+
+				// is Number or Unicode Codepoint ?
+				if (tmp.match(/^([0-9]|[a-f])+$/)) {
+					hex = +('0x' + tmp);
+					ar.push(+tmp);
+					ar.push(hex);
+					ar.push(String.octet2Codepoint(tmp));
+					ar.push(String.octet2Codepoint(hex));
+				}
+				// evaluate as UTF-8 String
+				for (i = 0; i < str.length; i++) {
+					ar.push(str.charCodeAt(i));
+				}
+
+				return ar.filter(function(v) {
+					return (!isNaN(v) && v && v <= 0x1fffff);
+				}).uniq();
+			}
+		};
+		return p;
+	})();
+
 	var AppView = Backbone.View.extend({
 		el: '#wrapper',
 		initialize: function() {
@@ -24,8 +53,8 @@ $(function() {
 		},
 		initialize: function() {
 			_.bindAll(this, 'onSearch', 'setCP', 'removeAll', 'clearField');
-			this.$input = $('.input_query').val('U+3042').focus();
-			//this.$input.focus();
+			this.queryProcessor = new QueryProcessor();
+			this.$input = $('.input_query').val('U+3042').focus().select();
 		},
 		onSearch: function(e) {
 			var key = this.$input.val();
@@ -34,30 +63,9 @@ $(function() {
 			}
 			this.prev = key;
 			this.removeAll();
-
-			var tmp = key.toLowerCase().replace('u+', '').replace('0x', ''),
-				num, hex, i = 0,
-				ar = [];
-
-			// is Number or Unicode Codepoint ?
-			if (tmp.match(/^([0-9]|[a-f])+$/)) {
-				hex = +('0x' + tmp);
-				ar.push(+tmp);
-				ar.push(hex);
-				ar.push(String.octet2Codepoint(tmp));
-				ar.push(String.octet2Codepoint(hex));
-			}
-			// evaluate as UTF-8 String
-			for (; i < key.length; i++) {
-				ar.push(key.charCodeAt(i));
-			}
-
-			ar.filter(function(v) {
-				return (!isNaN(v) && v && v <= 0x1fffff);
-			}).uniq().forEach(_.bind(function(n) {
+			this.queryProcessor.exec(key).forEach(_.bind(function(n) {
 				this.setCP(n);
 			}, this));
-
 		},
 		setCP: function(cp) {
 			var dec = String.codepoint2Octet(cp);
@@ -67,7 +75,7 @@ $(function() {
 				hex: '0x' + dec.toString(16).toUpperCase().zeroPadding('even'),
 				dec: '' + dec,
 				character: String.fromCharCodeEx(cp),
-				iso8859: getISO8859N(cp),
+				iso8859: getISO8859NFromUnicode(cp),
 				name: unicodeNameList[cp] || ''
 			}));
 		},

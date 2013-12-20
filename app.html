@@ -2,20 +2,19 @@
 <html lang="ja">
 <head>
 	<meta charset="utf-8">
-	<title>UTF8Finder</title>
+	<title>UTF-8 Finder</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="reset.css" media="all">
-	<link rel="stylesheet" href="style.css" media="all">
+	<link rel="stylesheet" href="css/reset.css" media="all">
+	<link rel="stylesheet" href="css/style.css" media="all">
 	<link rel="stylesheet" href="font/typicons.css" media="all">
-	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-	<script src="http://underscorejs.org/underscore-min.js"></script>
-	<script src="http://backbonejs.org/backbone-min.js"></script>
-	<script src="ISO8859N2UnicodeTable.js"></script>
-	<script src="Unicode2ISO8859NTable.js"></script>
-	<script src="unicodeNameList.js"></script>
-	<script src="extension.js"></script>
-	<script src="app.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+	<script src="js/extension.js"></script>
+	<script src="js/unicode2ISO8859N.js"></script>
+	<script src="js/unicodeNameList.js"></script>
+	<script src="js/app.js"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -28,10 +27,14 @@
 		<div class="result clearfix">
 			<ul class="results"></ul>
 		</div>
+		<footer>
+			<p>&copy; 2013 poppycocker</p>
+			<p><a href="https://github.com/poppycocker/UTF8Finder" target="_blank">&gt;&gt; view on GitHub</a></p>
+		</footer>
 	</div>
 
 	<script type=text/template id="tmpl_result">
-		<span class="char_face"><%= character %></span>
+		<h2 class="char_face"><%= character %></h2>
 		<div class="unicode_info">
 			<p><%= codePoint %>&nbsp;(<%= cpDec %>)</p>
 			<p><%= hex %>&nbsp;(<%= dec %>)</p>

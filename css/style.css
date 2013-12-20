@@ -74,7 +74,7 @@ h1 {
 .results li {
 	font-size: 1.2em;
 	width: 100%;
-	border-bottom: 1px dashed #cccccc;
+	border-bottom: 1px dashed #aaaaaa;
 	padding: 0.2em;
 }
 
@@ -107,4 +107,9 @@ h1 {
 
 .iso8859 li {
 	border: none;
+	padding: 0;
+}
+
+footer {
+	padding: 2em;
 }
