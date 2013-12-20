@@ -115,5 +115,11 @@ a {
 }
 
 footer {
-	padding: 2em;
+	font-size: 0.7em;
+	position: fixed;
+	bottom: 0;
+	padding: 0.1em;
+	background-color: white;
+	width: 100%;
+	border-top: 1px solid #d8d8d8;
 }
