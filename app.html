@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="css/reset.css" media="all">
 	<link rel="stylesheet" href="css/style.css" media="all">
 	<link rel="stylesheet" href="font/typicons.css" media="all">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
 	<script src="js/extension.js"></script>
@@ -28,6 +28,13 @@
 			<ul class="results"></ul>
 		</div>
 		<footer>
+			<p>
+				powered by 
+				<a href="http://jquery.com/" target="_blank">jQuery</a>, 
+				<a href="http://backbonejs.org/‎" target="_blank">Backbone.js</a>, 
+				<a href="http://underscorejs.org/‎" target="_blank">Underscore.js</a>, 
+				<a href="http://typicons.com/" target="_blank">Typicons</a>
+			</p>
 			<p>&copy; 2013 poppycocker</p>
 			<p><a href="https://github.com/poppycocker/UTF8Finder" target="_blank">&gt;&gt; view on GitHub</a></p>
 		</footer>
@@ -36,8 +43,8 @@
 	<script type=text/template id="tmpl_result">
 		<h2 class="char_face"><%= character %></h2>
 		<div class="unicode_info">
-			<p><%= codePoint %>&nbsp;(<%= cpDec %>)</p>
-			<p><%= hex %>&nbsp;(<%= dec %>)</p>
+			<p>U+<%= codePoint %>&nbsp;(<%= cpDec %>)</p>
+			<p>0x<%= hex %>&nbsp;(<%= dec %>)</p>
 			<p class="unicode_name"><%= name %></p>
 		</div>
 		<ul class="iso8859">

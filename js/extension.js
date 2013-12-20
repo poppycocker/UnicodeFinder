@@ -14,13 +14,14 @@
 		return dest;
 	};
 
+	//                                               (big-endian)
 	// [UCS-2 (UCS-4)]     [codepoint bit pattern]   [1st byte]  [2nd byte]  [3rd byte]  [4th byte]
 	// U+ 0000..  U+007F    00000000-0xxxxxxx         0xxxxxxx
 	// U+ 0080..  U+07FF    00000xxx-xxyyyyyy         110xxxxx    10yyyyyy
 	// U+ 0800..  U+FFFF    xxxxyyyy-yyzzzzzz         1110xxxx    10yyyyyy    10zzzzzz    
 	// U+10000..U+1FFFFF    00000000-000wwwxx         11110www    10xxxxxx    10yyyyyy    10zzzzzz
 	//                     -xxxxyyyy-yyzzzzzz
-	var headerTable = [
+	var prefixTable = [
 		0xc0, // 192(11000000) 2 byte
 		0xe0, // 224(11100000) 3 byte
 		0xf0  // 240(11110000) 4 byte
@@ -32,17 +33,28 @@
 		octet2Codepoint: function(octet) {
 			var bytes, n, shift1st, codePoint;
 			octet = +octet;
+			// size check: requires less than 4bytes
+			bytes = Math.floor(Math.log(octet) / Math.log(0xFF) + 1);
+			if (bytes > 4) {
+				return 0;
+			}
 			// range check
 			if ((0x7f < octet && octet < 0xc280) ||
 				(0xdfbf < octet && octet < 0xe0a080) ||
 				(0xefbfbf < octet && octet < 0xf0908080)) {
 				return 0;
 			}
-			// requires less than 4bytes
-			bytes = Math.floor(Math.log(octet) / Math.log(0xFF) + 1);
-			if (bytes > 4) {
+			// format check: 1st byte
+			if (((octet >> ((bytes - 1) * 8)) & ((0xff >> (7 - bytes)) << (7 - bytes))) !== prefixTable[bytes - 2]) {
 				return 0;
 			}
+			// format check: 2nd,3rd,4th byte
+			for (n = 0; n < bytes - 1; n++) {
+				if (((octet >> (n * 8)) & 0xc0) !== 0x80) {
+					return 0;
+				}
+			}
+
 			// mask 1st byte
 			shift1st = (bytes === 1) ? 0 : (bytes + 1);
 			codePoint = (octet >> ((bytes - 1) * 8)) & (0xFF >> shift1st);
@@ -77,7 +89,7 @@
 				octet += (((codePoint >> 12) & 0x3f) + 0x80) << 16;
 				bytes++;
 			}
-			signed = (((codePoint >> ((bytes - 1) * 6)) & (bytes === 4 ? 0x07 : 0x3f)) + (headerTable[bytes - 2])) << ((bytes - 1) * 8);
+			signed = (((codePoint >> ((bytes - 1) * 6)) & (bytes === 4 ? 0x07 : 0x3f)) + (prefixTable[bytes - 2])) << ((bytes - 1) * 8);
 			// signed->unsigned hack
 			octet += signed >>> 0;
 
@@ -108,17 +120,17 @@
 				return (this.length % 2 === 0) ? '' + this : '0' + this;
 			} else if (length === 'odd') {
 				return (this.length % 2 === 0) ? '0' + this : '' + this;
-			} else {
-				for (; i < length - 1; i++) {
-					zeros += '0';
-				}
-				return (zeros + this).slice(0 - length);
 			}
+			for (; i < length - 1; i++) {
+				zeros += '0';
+			}
+			return (zeros + this).slice(0 - length);
 		}
 	});
 
 	mixin(Array.prototype, {
 		uniq: function() {
+			// depends on source's order
 			var o = {}, i = 0,
 				r = [];
 			for (; i < this.length; i++) {

@@ -3,7 +3,7 @@ $(function() {
 	var QueryProcessor = (function() {
 		var p = function() {};
 		p.prototype = {
-			exec: function(str) {
+			getCodePoints: function(str) {
 				var tmp = str.toLowerCase().replace('u+', '').replace('0x', ''),
 					num, hex, i,
 					ar = [];
@@ -11,10 +11,10 @@ $(function() {
 				// is Number or Unicode Codepoint ?
 				if (tmp.match(/^([0-9]|[a-f])+$/)) {
 					hex = +('0x' + tmp);
-					ar.push(+tmp);
 					ar.push(hex);
-					ar.push(String.octet2Codepoint(tmp));
+					ar.push(+tmp);
 					ar.push(String.octet2Codepoint(hex));
+					ar.push(String.octet2Codepoint(tmp));
 				}
 				// evaluate as UTF-8 String
 				for (i = 0; i < str.length; i++) {
@@ -33,15 +33,12 @@ $(function() {
 		el: '#wrapper',
 		initialize: function() {
 			var collection = new ResultCollection();
-
-			this.searchView = new SearchView({
-				collection: collection
-			});
 			this.resultView = new ResultView({
 				collection: collection
 			});
-
-			this.searchView.onSearch();
+			this.searchView = new SearchView({
+				collection: collection
+			});
 		},
 	});
 
@@ -55,6 +52,7 @@ $(function() {
 			_.bindAll(this, 'onSearch', 'setCP', 'removeAll', 'clearField');
 			this.queryProcessor = new QueryProcessor();
 			this.$input = $('.input_query').val('U+3042').focus().select();
+			this.onSearch();
 		},
 		onSearch: function(e) {
 			var key = this.$input.val();
@@ -63,17 +61,17 @@ $(function() {
 			}
 			this.prev = key;
 			this.removeAll();
-			this.queryProcessor.exec(key).forEach(_.bind(function(n) {
+			this.queryProcessor.getCodePoints(key).forEach(_.bind(function(n) {
 				this.setCP(n);
 			}, this));
 		},
 		setCP: function(cp) {
-			var dec = String.codepoint2Octet(cp);
+			var octet = String.codepoint2Octet(cp);
 			this.collection.add(new ResultUnitModel({
-				codePoint: 'U+' + cp.toString(16).toUpperCase().zeroPadding(4),
-				cpDec: '' + cp,
-				hex: '0x' + dec.toString(16).toUpperCase().zeroPadding('even'),
-				dec: '' + dec,
+				codePoint: cp.toString(16).toUpperCase().zeroPadding(4),
+				cpDec: cp.toString(10),
+				hex: octet.toString(16).toUpperCase().zeroPadding('even'),
+				dec: octet.toString(10),
 				character: String.fromCharCodeEx(cp),
 				iso8859: getISO8859NFromUnicode(cp),
 				name: unicodeNameList[cp] || ''
@@ -83,7 +81,7 @@ $(function() {
 			this.collection.clearAll();
 		},
 		clearField: function() {
-			this.$input.val('');
+			this.$input.val('').focus();
 			this.removeAll();
 		}
 	});
