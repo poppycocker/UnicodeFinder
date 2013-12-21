@@ -73,8 +73,8 @@ $(function() {
 				hex: octet.toString(16).toUpperCase().zeroPadding('even'),
 				dec: octet.toString(10),
 				character: String.fromCharCodeEx(cp),
-				iso8859: getISO8859NFromUnicode(cp),
-				name: unicodeNameList[cp] || ''
+				iso8859: String.getISO8859NFromUnicode(cp),
+				name: String.getUnicodeName(cp)
 			}));
 		},
 		removeAll: function() {
