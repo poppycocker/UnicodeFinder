@@ -5,7 +5,7 @@
 			if (!src.hasOwnProperty(i)) {
 				continue;
 			}
-			if (!dest[i]) {
+			if (dest[i] === undefined) {
 				dest[i] = src[i];
 			} else {
 				throw new Error(dest + ' already has [' + i + '].');
@@ -35,7 +35,7 @@
 			var bytes, n, shift1st, codePoint;
 			octet = +octet;
 			// size check: requires less than 4bytes
-			bytes = Math.floor(Math.log(octet) / Math.log(0xFF) + 1);
+			bytes = Math.floor(Math.log(octet) / Math.log(0xff) + 1);
 			if (bytes > 4) {
 				return ERR_CODE;
 			}
@@ -58,25 +58,30 @@
 
 			// mask 1st byte
 			shift1st = (bytes === 1) ? 0 : (bytes + 1);
-			codePoint = (octet >> ((bytes - 1) * 8)) & (0xFF >> shift1st);
+			codePoint = (octet >> ((bytes - 1) * 8)) & (0xff >> shift1st);
 			for (n = 1; n < bytes; n++) {
 				codePoint <<= 6;
-				// 2nd-4th byte: mask 0x00111111
-				codePoint += (octet >> ((bytes - 1 - n) * 8)) & 0x3F;
+				// 2nd-4th byte: mask 0b00111111
+				codePoint += (octet >> ((bytes - 1 - n) * 8)) & 0x3f;
 			}
 			return codePoint;
 		},
 		codepoint2Octet: function(codePoint) {
+			// 12345(dec) -> 12345(dec)
+			// U+12345(Codepoint,hex) -> 74565(dec)
 			var octet, bytes = 2,
 				signed;
-			// 12345(dec) -> 12345(dec)
-			// U+12345(octet) -> 74565(dec)
+			// convert String to hex num
 			if (typeof(codePoint) === 'string') {
 				codePoint = +('0x' + codePoint.toLowerCase().replace('u+', ''));
+				if (isNaN(codePoint)) {
+					return ERR_CODE;
+				}
 			}
 			if (codePoint > LIMIT_UCS4) {
 				return ERR_CODE;
 			}
+			// ASCII
 			if (codePoint <= 0x007f) {
 				return codePoint;
 			}
@@ -106,7 +111,7 @@
 			// surrogate pair
 			codePoint -= 0x10000;
 			var w1 = 0xd800 | (codePoint >> 10);
-			var w2 = 0xDC00 | (codePoint & 0x03FF);
+			var w2 = 0xdc00 | (codePoint & 0x03ff);
 			return String.fromCharCode(w1, w2);
 		}
 	});
