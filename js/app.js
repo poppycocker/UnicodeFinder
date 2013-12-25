@@ -52,6 +52,13 @@ $(function() {
 			_.bindAll(this, 'onSearch', 'setCodepoint', 'removeAll', 'clearField');
 			this.queryProcessor = new QueryProcessor();
 			this.$input = $('.input_query').val('U+3042').focus().select();
+			shortcut.add('Ctrl+Q', _.bind(function() {
+				this.$input.focus().select();
+			}, this), {
+				'type': 'keydown',
+				'propagate': true,
+				'target': document
+			});
 			this.onSearch();
 		},
 		onSearch: function(e) {
@@ -126,8 +133,7 @@ $(function() {
 			};
 		}
 	});
-	var ResultCollection = Backbone.Collection.extend({
-	});
+	var ResultCollection = Backbone.Collection.extend({});
 
 	window.app = new AppView();
 });
