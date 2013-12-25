@@ -49,7 +49,7 @@ $(function() {
 			'click .icon-clear': 'clearField'
 		},
 		initialize: function() {
-			_.bindAll(this, 'onSearch', 'setCP', 'removeAll', 'clearField');
+			_.bindAll(this, 'onSearch', 'setCodepoint', 'removeAll', 'clearField');
 			this.queryProcessor = new QueryProcessor();
 			this.$input = $('.input_query').val('U+3042').focus().select();
 			this.onSearch();
@@ -62,10 +62,10 @@ $(function() {
 			this.prev = key;
 			this.removeAll();
 			this.queryProcessor.getCodePoints(key).forEach(_.bind(function(n) {
-				this.setCP(n);
+				this.setCodepoint(n);
 			}, this));
 		},
-		setCP: function(cp) {
+		setCodepoint: function(cp) {
 			var octet = String.codepoint2Octet(cp);
 			this.collection.add(new ResultUnitModel({
 				codePoint: cp.toString(16).toUpperCase().zeroPadding(4),
@@ -78,7 +78,7 @@ $(function() {
 			}));
 		},
 		removeAll: function() {
-			this.collection.clearAll();
+			_.invoke(this.collection.toArray(), 'destroy');
 		},
 		clearField: function() {
 			this.$input.val('').focus();
@@ -120,17 +120,13 @@ $(function() {
 				cpDec: '',
 				hex: '',
 				dec: '',
-				character: ''
+				character: '',
+				iso8859: '',
+				name: ''
 			};
 		}
 	});
 	var ResultCollection = Backbone.Collection.extend({
-		clearAll: function() {
-			var model;
-			while (model = this.first()) {
-				model.destroy();
-			}
-		}
 	});
 
 	window.app = new AppView();
