@@ -11684,6 +11684,7 @@
 		0x33FD: 'IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY',
 		0x33FE: 'IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY-ONE',
 		0x33FF: 'SQUARE GAL',
+		// 0x3400-0x4DBF: CJK UNIFIED IDEOGRAPHS EXTENSION A
 		0x4DC0: 'HEXAGRAM FOR THE CREATIVE HEAVEN',
 		0x4DC1: 'HEXAGRAM FOR THE RECEPTIVE EARTH',
 		0x4DC2: 'HEXAGRAM FOR DIFFICULTY AT THE BEGINNING',
@@ -11748,6 +11749,7 @@
 		0x4DFD: 'HEXAGRAM FOR SMALL PREPONDERANCE',
 		0x4DFE: 'HEXAGRAM FOR AFTER COMPLETION',
 		0x4DFF: 'HEXAGRAM FOR BEFORE COMPLETION',
+		// 0x4E00-0x9FFF: CJK UNIFIED IDEOGRAPH
 		0xA000: 'YI SYLLABLE IT',
 		0xA001: 'YI SYLLABLE IX',
 		0xA002: 'YI SYLLABLE I',
@@ -14377,6 +14379,7 @@
 		0xABF7: 'MEETEI MAYEK DIGIT SEVEN',
 		0xABF8: 'MEETEI MAYEK DIGIT EIGHT',
 		0xABF9: 'MEETEI MAYEK DIGIT NINE',
+		// 0xAC00-0xD7A3: HANGUL SYLLABLE
 		0xD7B0: 'HANGUL JUNGSEONG O-YEO',
 		0xD7B1: 'HANGUL JUNGSEONG O-O-I',
 		0xD7B2: 'HANGUL JUNGSEONG YO-A',
@@ -14449,6 +14452,10 @@
 		0xD7F9: 'HANGUL JONGSEONG SSANGCIEUC',
 		0xD7FA: 'HANGUL JONGSEONG PHIEUPH-SIOS',
 		0xD7FB: 'HANGUL JONGSEONG PHIEUPH-THIEUTH',
+		// 0xD800-0xDB7F: HIGH SURROGATE
+		// 0xDB80-0xDBFF: HIGH PRIVATE USE SURROGATE
+		// 0xDC00-0xDFFF: LOW SURROGATE
+		// 0xE000-0xF8FF: PRIVATE USE AREA
 		0xF900: 'CJK COMPATIBILITY IDEOGRAPH-F900',
 		0xF901: 'CJK COMPATIBILITY IDEOGRAPH-F901',
 		0xF902: 'CJK COMPATIBILITY IDEOGRAPH-F902',
@@ -23609,6 +23616,9 @@
 		0x1F773: 'ALCHEMICAL SYMBOL FOR HALF OUNCE',
 		0x1FFFE: '[not a character]',
 		0x1FFFF: '[not a character]',
+		// CJK UNIFIED IDEOGRAPHS EXTENSION B
+		// CJK UNIFIED IDEOGRAPHS EXTENSION C
+		// CJK UNIFIED IDEOGRAPHS EXTENSION D
 		0x2F800: 'CJK COMPATIBILITY IDEOGRAPH-2F800',
 		0x2F801: 'CJK COMPATIBILITY IDEOGRAPH-2F801',
 		0x2F802: 'CJK COMPATIBILITY IDEOGRAPH-2F802',
@@ -24520,10 +24530,42 @@
 		0x10FFFF: '[not a character]'
 	};
 
+	var getHexString = function(codePoint) {
+		return codePoint.toString(16).toUpperCase();
+	};
+
 	o.getUnicodeName = function(codePoint) {
-		if (0x4e00 <= codePoint && codePoint <= 0x9fff) {
-			return 'CJK UNIFIED IDEOGRAPH-' + codePoint.toString(16).toUpperCase();
+		if (0x3400 <= codePoint && codePoint <= 0x4dbf) {
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION A -' + getHexString(codePoint);
 		}
+		if (0x4e00 <= codePoint && codePoint <= 0x9fff) {
+			return 'CJK UNIFIED IDEOGRAPH-' + getHexString(codePoint);
+		}
+		if (0xac00 <= codePoint && codePoint <= 0xd7a3) {
+			return 'HANGUL SYLLABLE-' + getHexString(codePoint);
+		}
+		if (0xd800 <= codePoint && codePoint <= 0xdb7f) {
+			return 'HIGH SURROGATE-' + getHexString(codePoint);
+		}
+		if (0xdb80 <= codePoint && codePoint <= 0xdbff) {
+			return 'HIGH PRIVATE USE SURROGATE-' + getHexString(codePoint);
+		}
+		if (0xdc00 <= codePoint && codePoint <= 0xdfff) {
+			return 'LOW SURROGATE-' + getHexString(codePoint);
+		}
+		if (0xe000 <= codePoint && codePoint <= 0xf8ff) {
+			return 'PRIVATE USE AREA -' + getHexString(codePoint);
+		}
+		if (0x20000 <= codePoint && codePoint <= 0x2a6ff) {
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION B -' + getHexString(codePoint);
+		}
+		if (0x2a700 <= codePoint && codePoint <= 0x2b734) {
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION C -' + getHexString(codePoint);
+		}
+		if (0x2b740 <= codePoint && codePoint <= 0x2b81d) {
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION D -' + getHexString(codePoint);
+		}
+
 		return unicodeNameList[codePoint] || '';
 	};
 
