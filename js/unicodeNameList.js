@@ -23616,9 +23616,9 @@
 		0x1F773: 'ALCHEMICAL SYMBOL FOR HALF OUNCE',
 		0x1FFFE: '[not a character]',
 		0x1FFFF: '[not a character]',
-		// CJK UNIFIED IDEOGRAPHS EXTENSION B
-		// CJK UNIFIED IDEOGRAPHS EXTENSION C
-		// CJK UNIFIED IDEOGRAPHS EXTENSION D
+		// 0x20000-0x2A6FF: CJK UNIFIED IDEOGRAPHS EXTENSION B
+		// 0x2A700-0x2B734: CJK UNIFIED IDEOGRAPHS EXTENSION C
+		// 0x2B740-0x2B81D: CJK UNIFIED IDEOGRAPHS EXTENSION D
 		0x2F800: 'CJK COMPATIBILITY IDEOGRAPH-2F800',
 		0x2F801: 'CJK COMPATIBILITY IDEOGRAPH-2F801',
 		0x2F802: 'CJK COMPATIBILITY IDEOGRAPH-2F802',
@@ -24564,6 +24564,12 @@
 		}
 		if (0x2b740 <= codePoint && codePoint <= 0x2b81d) {
 			return 'CJK UNIFIED IDEOGRAPHS EXTENSION D -' + getHexString(codePoint);
+		}
+		if (0xf0000 <= codePoint && codePoint <= 0xfffff) {
+			return 'SUPPLEMENTARY PRIVATE USE AREA-A-' + getHexString(codePoint);
+		}
+		if (0x100000 <= codePoint && codePoint <= 0x10ffff) {
+			return 'SUPPLEMENTARY PRIVATE USE AREA-B-' + getHexString(codePoint);
 		}
 
 		return unicodeNameList[codePoint] || '';
