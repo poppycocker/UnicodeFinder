@@ -71,6 +71,10 @@ $(function() {
 			this.queryProcessor.getCodePoints(key).forEach(_.bind(function(n) {
 				this.setCodepoint(n);
 			}, this));
+
+			if (this.collection.length === 0) {
+				this.collection.reset();
+			}
 		},
 		setCodepoint: function(cp) {
 			var octet = String.codepoint2Octet(cp);
@@ -86,6 +90,7 @@ $(function() {
 		},
 		removeAll: function() {
 			_.invoke(this.collection.toArray(), 'destroy');
+			this.collection.reset();
 		},
 		clearField: function() {
 			this.$input.val('').focus();
@@ -96,15 +101,21 @@ $(function() {
 	var ResultView = Backbone.View.extend({
 		el: '.results',
 		initialize: function() {
-			_.bindAll(this, 'render');
+			this.$sample = $('.sample');
+			_.bindAll(this, 'render', 'showSample');
 			this.collection.bind('add', this.render);
+			this.collection.bind('reset', this.showSample);
 		},
 		render: function(model) {
+			this.$sample.removeClass('showBlock');
 			var view = new ResultUnitView({
 				model: model
 			});
 			this.$el.append(view.render().$el);
 			return this;
+		},
+		showSample: function() {
+			this.$sample.addClass('showBlock');
 		}
 	});
 
