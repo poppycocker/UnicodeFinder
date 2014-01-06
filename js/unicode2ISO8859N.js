@@ -1,4 +1,4 @@
-(function(o) {
+(function() {
 	var Unicode_ISO88591 = {
 		0x00A1: 0xA1,
 		0x00A2: 0xA2,
@@ -1417,7 +1417,7 @@
 		table: Unicode_ISO885916
 	}];
 
-	o.getISO8859NFromUnicode = function(codePoint) {
+	this.getISO8859NFromUnicode = function(codePoint) {
 
 		var ascii, ret = [];
 		// common area
@@ -1441,4 +1441,4 @@
 			return e.code.length;
 		});
 	};
-})(String);
+}).call(String);

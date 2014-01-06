@@ -1,4 +1,4 @@
-(function(o) {
+(function() {
 	var ISO88591_Unicode = {
 		0xA1: 0x00A1,
 		0xA2: 0x00A2,
@@ -1417,7 +1417,7 @@
 		table: ISO885916_Unicode
 	}];
 
-	o.getCodePointFrom8859N = function(hex) {
+	this.getCodePointFrom8859N = function(hex) {
 
 		var code, ret = [];
 		// common area
@@ -1443,4 +1443,4 @@
 		return ret;
 	};
 
-})(String);
+}).call(String);

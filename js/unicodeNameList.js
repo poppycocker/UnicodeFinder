@@ -1,5 +1,5 @@
 // according to http://www.unicode.org/Public/UNIDATA/NamesList.txt
-(function(o) {
+(function() {
 	var unicodeNameList = {
 		0x0000: '[control] NULL',
 		0x0001: '[control] START OF HEADING',
@@ -24534,9 +24534,9 @@
 		return codePoint.toString(16).toUpperCase();
 	};
 
-	o.getUnicodeName = function(codePoint) {
+	this.getUnicodeName = function(codePoint) {
 		if (0x3400 <= codePoint && codePoint <= 0x4dbf) {
-			return 'CJK UNIFIED IDEOGRAPHS EXTENSION A -' + getHexString(codePoint);
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION A ' + getHexString(codePoint);
 		}
 		if (0x4e00 <= codePoint && codePoint <= 0x9fff) {
 			return 'CJK UNIFIED IDEOGRAPH-' + getHexString(codePoint);
@@ -24557,13 +24557,13 @@
 			return 'PRIVATE USE AREA -' + getHexString(codePoint);
 		}
 		if (0x20000 <= codePoint && codePoint <= 0x2a6ff) {
-			return 'CJK UNIFIED IDEOGRAPHS EXTENSION B -' + getHexString(codePoint);
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION B ' + getHexString(codePoint);
 		}
 		if (0x2a700 <= codePoint && codePoint <= 0x2b734) {
-			return 'CJK UNIFIED IDEOGRAPHS EXTENSION C -' + getHexString(codePoint);
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION C ' + getHexString(codePoint);
 		}
 		if (0x2b740 <= codePoint && codePoint <= 0x2b81d) {
-			return 'CJK UNIFIED IDEOGRAPHS EXTENSION D -' + getHexString(codePoint);
+			return 'CJK UNIFIED IDEOGRAPHS EXTENSION D ' + getHexString(codePoint);
 		}
 		if (0xf0000 <= codePoint && codePoint <= 0xfffff) {
 			return 'SUPPLEMENTARY PRIVATE USE AREA-A-' + getHexString(codePoint);
@@ -24575,4 +24575,4 @@
 		return unicodeNameList[codePoint] || '';
 	};
 
-})(String);
+}).call(String);

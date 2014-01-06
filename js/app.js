@@ -1,10 +1,12 @@
 $(function() {
 
+	var lastStateKey = 'lastState_UTF8Finder';
+
 	var QueryProcessor = (function() {
 		var p = function() {};
 		p.prototype = {
 			getCodePoints: function(str) {
-				var tmp = str.toLowerCase().replace('u+', '').replace('0x', ''),
+				var tmp = str.toLowerCase().replace('u+', '').replace('0x', '').replace(/\s/g, ''),
 					hex, i, ERR_CODE = -1,
 					ar = [];
 
@@ -13,8 +15,8 @@ $(function() {
 					hex = +('0x' + tmp);
 					ar.push(hex);
 					ar.push(+tmp);
-					ar.push(String.octet2Codepoint(hex));
-					ar.push(String.octet2Codepoint(tmp));
+					ar.push(String.utf8Octet2Codepoint(hex));
+					ar.push(String.utf8Octet2Codepoint(tmp));
 				}
 				// evaluate as UTF-8 String
 				for (i = 0; i < str.length; i++) {
@@ -51,7 +53,7 @@ $(function() {
 		initialize: function() {
 			_.bindAll(this, 'onSearch', 'setCodepoint', 'removeAll', 'clearField');
 			this.queryProcessor = new QueryProcessor();
-			this.$input = $('.input_query').val('U+3042').focus().select();
+			// Ctrl+Q to focus on the input field.
 			shortcut.add('Ctrl+Q', _.bind(function() {
 				this.$input.focus().select();
 			}, this), {
@@ -59,7 +61,16 @@ $(function() {
 				'propagate': true,
 				'target': document
 			});
+			// load last state or show demo.
+			var lastState = window.localStorageWrapper.data(lastStateKey) || {};
+			this.$input = $('.input_query').val(lastState.query || 'U+3042').focus().select();
 			this.onSearch();
+			// save last state when the window is reloaded or closed.
+			window.onbeforeunload = _.bind(function() {
+				window.localStorageWrapper.data(lastStateKey, {
+					query: this.$input.val()
+				});
+			}, this);
 		},
 		onSearch: function(e) {
 			var key = this.$input.val();
@@ -77,16 +88,17 @@ $(function() {
 			}
 		},
 		setCodepoint: function(cp) {
-			var octet = String.codepoint2Octet(cp);
-			this.collection.add(new ResultUnitModel({
+			var octet = String.codepoint2UTF8Octet(cp);
+			var model = new ResultUnitModel({
 				codePoint: cp.toString(16).toUpperCase().zeroPadding(4),
-				cpDec: cp.toString(10),
-				hex: octet.toString(16).toUpperCase().zeroPadding('even'),
-				dec: octet.toString(10),
+				codePointDec: cp.toString(10),
+				octet: octet.toString(16).toUpperCase().zeroPadding('even').devideBy(2, ' '),
+				octetDec: octet.toString(10),
 				character: String.fromCharCodeEx(cp),
 				iso8859: String.getISO8859NFromUnicode(cp),
 				name: String.getUnicodeName(cp)
-			}));
+			});
+			this.collection.add(model);
 		},
 		removeAll: function() {
 			_.invoke(this.collection.toArray(), 'destroy');
@@ -135,9 +147,9 @@ $(function() {
 		defaults: function() {
 			return {
 				codePoint: '',
-				cpDec: '',
-				hex: '',
-				dec: '',
+				codePointDec: '',
+				octet: '',
+				octetDec: '',
 				character: '',
 				iso8859: '',
 				name: ''

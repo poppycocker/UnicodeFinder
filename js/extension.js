@@ -24,14 +24,14 @@
 	var prefixTable = [
 		0xc0, // 192(11000000) 2 byte
 		0xe0, // 224(11100000) 3 byte
-		0xf0  // 240(11110000) 4 byte
+		0xf0 // 240(11110000) 4 byte
 	];
 	var LIMIT_UCS2 = 0xffff;
 	var LIMIT_UCS4 = 0x1fffff;
 	var ERR_CODE = -1;
 
 	mixin(String, {
-		octet2Codepoint: function(octet) {
+		utf8Octet2Codepoint: function(octet) {
 			var bytes, n, shift1st, codePoint;
 			octet = +octet;
 			// size check: requires less than 4bytes
@@ -66,7 +66,7 @@
 			}
 			return codePoint;
 		},
-		codepoint2Octet: function(codePoint) {
+		codepoint2UTF8Octet: function(codePoint) {
 			// 12345(dec) -> 12345(dec)
 			// U+12345(Codepoint,hex) -> 74565(dec)
 			var octet, bytes = 2,
@@ -147,6 +147,22 @@
 				o[this[i]] = this[i];
 			}
 			return r;
+		}
+	});
+
+	mixin(String.prototype, {
+		devideBy: function(count, delimiter) {
+			count = count || 1;
+			delimiter = delimiter || ' ';
+			var ret = '',
+				i = 0;
+			for (; i < this.length; i++) {
+				ret += this[i];
+				if (((i + 1) % count === 0) && (i !== this.length - 1)) {
+					ret += delimiter;
+				}
+			}
+			return ret;
 		}
 	});
 

@@ -86,15 +86,15 @@ a {
 	display: block;
 	float: left;
 	font-size: 3.6em;
-	padding: 0.3em 3%;
-	width: 20%;
+	padding: 0.3em 1%;
+	width: 25%;
 }
 
 .unicode_info {
 	float: left;
-	padding: 2% 7%;
+	padding: 2% 3%;
 	text-align: left;
-	width: 26%;
+	width: 41%;
 }
 
 .unicode_name {
@@ -103,7 +103,7 @@ a {
 
 .iso8859 {
 	font-size: 0.5em;
-	padding: 2% 7%;
+	padding: 2% 3%;
 	float: left;
 	text-align: left;
 	width: 20%;
@@ -127,6 +127,10 @@ footer {
 .sample {
 	display: none;
 	color: #cccccc;
+}
+
+.sample .unicode_info {
+	font-size: 0.8em;
 }
 
 .showBlock {
