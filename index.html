@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 	<meta charset="utf-8">
-	<title>UTF-8 Finder</title>
+	<title>Unicode Character Finder</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="css/reset.css" media="all">
@@ -12,6 +12,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+	<script src="js/jquery.highlight.js"></script>
 	<script src="js/shortcut.js"></script>
 	<script src="js/localStorageWrapper.js"></script>
 	<script src="js/extension.js"></script>
@@ -21,7 +22,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<h1>UTF-8 Finder</h1>
+		<h1>Unicode Character Finder</h1>
 		<div class="search_box">
 			<span class="typcn typcn-zoom icon-search"></span>
 			<span class="typcn typcn-times icon-clear"></span>
@@ -34,6 +35,7 @@
 					<div class="unicode_info">
 						<p>Unicode CodePoint:<br>&nbsp;Codepoint(Decimal Num)</p>
 						<p>UTF-8 Octet:<br>&nbsp;Hex Num(Decimal Num)</p>
+						<p>UTF-16 Octet:<br>&nbsp;Hex Num(Decimal Num)</p>
 						<p class="unicode_name">Unicode Name</p>
 					</div>
 					<ul class="iso8859">
@@ -46,8 +48,9 @@
 			<p>
 				powered by 
 				<a href="http://jquery.com/" target="_blank">jQuery</a>, 
-				<a href="http://backbonejs.org/‎" target="_blank">Backbone.js</a>, 
-				<a href="http://underscorejs.org/‎" target="_blank">Underscore.js</a>, 
+				<a href="http://bartaz.github.io/sandbox.js/jquery.highlight.html" target="_blank">jQuery.highlight</a>, 
+				<a href="http://backbonejs.org/" target="_blank">Backbone.js</a>, 
+				<a href="http://underscorejs.org/" target="_blank">Underscore.js</a>, 
 				<a href="http://www.openjs.com/scripts/events/keyboard_shortcuts/" target="_blank">shortcut.js</a>,
 				<a href="http://typicons.com/" target="_blank">Typicons</a>
 				&nbsp;
@@ -62,7 +65,8 @@
 		<h2 class="char_face"><%= character %></h2>
 		<div class="unicode_info">
 			<p>U+<%= codePoint %>(<%= codePointDec %>)</p>
-			<p><%= octet %>(<%= octetDec %>)</p>
+			<p>UTF-8: <%= octet8 %>(<%= octet8Dec %>)</p>
+			<p>UTF-16: <%= octet16 %>(<%= octet16Dec %>)</p>
 			<p class="unicode_name"><%= name %></p>
 		</div>
 		<ul class="iso8859">

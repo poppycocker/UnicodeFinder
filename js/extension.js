@@ -66,7 +66,7 @@
 			}
 			return codePoint;
 		},
-		codepoint2UTF8Octet: function(codePoint) {
+		codePoint2UTF8Octet: function(codePoint) {
 			// 12345(dec) -> 12345(dec)
 			// U+12345(Codepoint,hex) -> 74565(dec)
 			var octet, bytes = 2,
@@ -101,18 +101,22 @@
 
 			return octet;
 		},
-		fromCharCodeEx: function(codePoint) {
+		codePoint2UTF16Octet: function(codePoint) {
 			if (codePoint <= LIMIT_UCS2) {
-				return String.fromCharCode(codePoint);
+				return [codePoint];
 			}
 			if (codePoint > LIMIT_UCS4) {
-				return '';
+				return [0];
 			}
 			// surrogate pair
 			codePoint -= 0x10000;
 			var w1 = 0xd800 | (codePoint >> 10);
 			var w2 = 0xdc00 | (codePoint & 0x03ff);
-			return String.fromCharCode(w1, w2);
+			return [w1, w2];
+		},
+		fromCharCodeEx: function(codePoint) {
+			var w = this.codePoint2UTF16Octet(codePoint);
+			return String.fromCharCode.apply(null, w);
 		}
 	});
 
