@@ -136,7 +136,16 @@
 				zeros += '0';
 			}
 			return (zeros + this).slice(0 - length);
+		},
+		charCodeAtEx: function(idx) {
+			var x = this.charCodeAt(idx);
+			var y = idx + 1 < this.length ? this.charCodeAt(idx + 1) : 0;
+			if (0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF) {
+				return 0x10000 + ((x & 0x3FF) << 10) | (y & 0x3FF);
+			}
+			return x;
 		}
+
 	});
 
 	mixin(Array.prototype, {

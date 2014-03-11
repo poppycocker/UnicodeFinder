@@ -16,7 +16,7 @@ $(function() {
 			set: function(q) {
 				this.init(q);
 				var tmp = q.toLowerCase().replace('u+', '').replace('0x', '').replace(/\s/g, ''),
-					hex, i, ERR_CODE = -1,
+					hex, i, code, ERR_CODE = -1,
 					ar = [];
 				this.cleansedKey = tmp;
 
@@ -31,9 +31,14 @@ $(function() {
 					ar.push(String.utf8Octet2Codepoint(tmp));
 				}
 
-				Array.prototype.push.apply(ar, Array.prototype.map.call(q, function(ch) {
-					return ch.charCodeAt();
-				}));
+				// consider surrogate pair
+				for (i = 0; i < q.length; i++) {
+					code = q.charCodeAtEx(i);
+					if (code > 0xffff) {
+						i++;
+					}
+					ar.push(code);
+				}
 
 				if (isNumOrCode) {
 					if (tmp.length > 1) {
